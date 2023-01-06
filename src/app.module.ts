@@ -17,7 +17,7 @@ import { authController } from './core/auth/controller/auth.controller';
     JwtModule.register({
       secret: 'jb2KURr1O89JjfcvCPIZkh3qQQ',
       signOptions: {
-        expiresIn: 60 * 6,
+        expiresIn: 60,
       },
     }),
 

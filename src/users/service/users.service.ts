@@ -1,12 +1,14 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserEntity } from '../entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { AddressDTO } from '../dto/address-user.dto';
 import { AddressEntity } from '../entities/address.entity';
 import { authDto } from '../dto/login-user.dto';
+import { JwtService } from '@nestjs/jwt';
+import { changePasswordDto } from '../dto/update-user.dto';
+import { UnprocessableEntityException } from '@nestjs/common/exceptions';
 
 @Injectable()
 export class UsersService {
@@ -48,6 +50,25 @@ export class UsersService {
       }
     });
   }
+
+  async changePassword(id: number, body: changePasswordDto) {
+    const user = await this.userRepository.findOne({
+      where: {
+        userId: id,
+      },
+    });
+    user.password = await this.hashPassword(body.password, user.salt);
+
+    await this.userRepository.save(user);
+    console.log(body);
+    return;
+  }
+  // async changePassword(password: changePasswordDto): Promise<UserEntity> {
+  //   if (password.password != password.confirm_password) {
+  //     throw new UnprocessableEntityException('As senhas não conferem.');
+  //   }
+  //   return await this.changePassword(password);
+  // }
 
   private async hashPassword(password: string, salt: string): Promise<string> {
     return bcrypt.hash(password, salt);

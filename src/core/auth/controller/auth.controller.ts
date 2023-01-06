@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, Headers } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { authDto } from 'src/users/dto/login-user.dto';
 
@@ -9,5 +9,11 @@ export class authController {
   @Post('login')
   async signIn(@Body() credentialsDto: authDto) {
     return await this.authService.signIn(credentialsDto);
+  }
+
+  @Get('me')
+  async me(@Headers('authorization') authToken) {
+    const token = authToken.split('Bearer ')[1];
+    return await this.authService.validateToken(token);
   }
 }
