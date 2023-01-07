@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 import { AddressEntity } from './entities/address.entity';
+import { Device } from 'src/core/database/seeds/device';
 
 export const userProvider = [
   {
@@ -13,6 +14,11 @@ export const userProvider = [
     provide: 'ADDRESS_REPOSITORY',
     useFactory: (dataSource: DataSource) =>
       dataSource.getRepository(AddressEntity),
+    inject: ['DATA_SOURCE'],
+  },
+  {
+    provide: 'DEVICE_REPOSITORY',
+    useFactory: (dataSource: DataSource) => dataSource.getRepository(Device),
     inject: ['DATA_SOURCE'],
   },
 ];

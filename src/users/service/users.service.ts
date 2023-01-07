@@ -3,12 +3,10 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { UserEntity } from '../entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { AddressDTO } from '../dto/address-user.dto';
 import { AddressEntity } from '../entities/address.entity';
-import { authDto } from '../dto/login-user.dto';
-import { JwtService } from '@nestjs/jwt';
 import { changePasswordDto } from '../dto/update-user.dto';
-import { UnprocessableEntityException } from '@nestjs/common/exceptions';
+import { linkDeviceDto } from '../dto/link-device.dto';
+import { Device } from 'src/core/database/seeds/device';
 
 @Injectable()
 export class UsersService {
@@ -17,6 +15,8 @@ export class UsersService {
     private userRepository: Repository<UserEntity>,
     @Inject('ADDRESS_REPOSITORY')
     private addressRepository: Repository<AddressEntity>,
+    @Inject('DEVICE_REPOSITORY')
+    private deviceRepository: Repository<Device>,
   ) {}
 
   createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
@@ -63,12 +63,26 @@ export class UsersService {
     console.log(body);
     return;
   }
-  // async changePassword(password: changePasswordDto): Promise<UserEntity> {
-  //   if (password.password != password.confirm_password) {
-  //     throw new UnprocessableEntityException('As senhas não conferem.');
-  //   }
-  //   return await this.changePassword(password);
-  // }
+
+  async linkDevice(id: number, body: linkDeviceDto) {
+    const device = await this.deviceRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+    return device;
+  }
+
+  async findAllDevices(): Promise<Device[]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await this.deviceRepository.find();
+        resolve(res);
+      } catch (error) {
+        reject({ detail: error.detail, code: error.ccode });
+      }
+    });
+  }
 
   private async hashPassword(password: string, salt: string): Promise<string> {
     return bcrypt.hash(password, salt);
@@ -149,4 +163,11 @@ export class UsersService {
 //       reject(error);
 //     }
 //   });
+// }
+
+// async changePassword(password: changePasswordDto): Promise<UserEntity> {
+//   if (password.password != password.confirm_password) {
+//     throw new UnprocessableEntityException('As senhas não conferem.');
+//   }
+//   return await this.changePassword(password);
 // }
