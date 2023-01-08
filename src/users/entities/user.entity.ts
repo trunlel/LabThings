@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { AddressEntity } from './address.entity';
 import * as bcrypt from 'bcrypt';
-import { Device } from 'src/core/database/seeds/device';
+import { UserDeviceEntity } from '../../devices/entities/user-device.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -39,21 +39,24 @@ export class UserEntity {
   @JoinColumn({ name: 'addressId' })
   address: AddressEntity;
 
-  @OneToMany('DeviceEntity', (device: Device) => device.id, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  devices: Device;
-
-  // addDevices(device: DeviceEntity) {
-  //   if (this.devices == null) {
-  //     this.devices = new Array<DeviceEntity>();
-  //   }
-  //   this.devices.push(device);
-  // }
-
   async checkPassword(receivedPassword: string): Promise<boolean> {
     const hash = await bcrypt.hash(receivedPassword, this.salt);
     return this.password === hash;
+  }
+
+  @OneToMany(
+    () => UserDeviceEntity,
+    (userDevices) => userDevices.deviceCreated,
+    {
+      cascade: true,
+    },
+  )
+  devicesCreated: UserDeviceEntity[];
+
+  addDevice(devices: UserDeviceEntity) {
+    if (this.devicesCreated == null) {
+      this.devicesCreated = new Array<UserDeviceEntity>();
+    }
+    this.devicesCreated.push(devices);
   }
 }

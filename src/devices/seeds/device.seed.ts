@@ -1,13 +1,13 @@
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
-import { Device } from './device';
+import { DeviceEntity } from '../../devices/entities/device.entity';
 
 export default class DeviceSeeder implements Seeder {
   public async run(
     dataSource: DataSource,
     factoryManager: SeederFactoryManager,
   ): Promise<any> {
-    const repository = dataSource.getRepository(Device);
+    const repository = dataSource.getRepository(DeviceEntity);
     await repository.insert([
       {
         name: 'Lâmpada LED',

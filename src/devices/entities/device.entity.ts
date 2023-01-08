@@ -1,14 +1,15 @@
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from '../../users/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
+  OneToMany,
   JoinColumn,
 } from 'typeorm';
+import { UserDeviceEntity } from './user-device.entity';
 
 @Entity({ name: 'devices' })
-export class Device {
+export class DeviceEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -36,9 +37,12 @@ export class Device {
   @Column()
   mac_address: string;
 
-  // @ManyToOne(() => UserEntity, (user: UserEntity) => user.devices, {
+  @OneToMany(() => UserDeviceEntity, (userDevices) => userDevices.user, {
+    cascade: true,
+  })
+  userCreated: UserEntity[];
+
+  // @ManyToOne(() => UserEntity, (user) => user.devices, {
   //   onDelete: 'SET NULL',
   // })
-  // @JoinColumn({ name: 'user_id' }) // opcional para OneToMany
-  // user: UserEntity;
 }

@@ -1,14 +1,14 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UserEntity } from '../entities/user.entity';
-import { LinkedEntity } from '../entities/link-device.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { AddressDTO } from '../dto/address-user.dto';
 import { AddressEntity } from '../entities/address.entity';
-import { changePasswordDto } from '../dto/update-user.dto';
-import { linkDeviceDto } from '../dto/link-device.dto';
-import { Device } from 'src/core/database/seeds/device';
+import { authDto } from '../dto/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { changePasswordDto } from '../dto/update-user.dto';
+import { UnprocessableEntityException } from '@nestjs/common/exceptions';
 
 @Injectable()
 export class UsersService {
@@ -17,12 +17,6 @@ export class UsersService {
     private userRepository: Repository<UserEntity>,
     @Inject('ADDRESS_REPOSITORY')
     private addressRepository: Repository<AddressEntity>,
-    @Inject('DEVICE_REPOSITORY')
-    private deviceRepository: Repository<Device>,
-    @Inject('LINKED_REPOSITORY')
-    private linkedRepository: Repository<LinkedEntity>,
-
-    private jwtService: JwtService,
   ) {}
 
   createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
@@ -69,34 +63,12 @@ export class UsersService {
     console.log(body);
     return;
   }
-
-  async linkDevice(id: number, body: linkDeviceDto): Promise<any> {
-    return new Promise(async (resolve) => {
-      let userDevice = this.linkedRepository.create();
-      userDevice = { ...body, ...userDevice };
-      console.log(userDevice);
-      const device: Device = await this.deviceRepository.findOne({
-        where: { id: id },
-        relations: {
-          id: true,
-        },
-      });
-
-      this.linkedRepository.save(device);
-      resolve(userDevice);
-    });
-  }
-
-  async findAllDevices(): Promise<Device[]> {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const res = await this.deviceRepository.find();
-        resolve(res);
-      } catch (error) {
-        reject({ detail: error.detail, code: error.ccode });
-      }
-    });
-  }
+  // async changePassword(password: changePasswordDto): Promise<UserEntity> {
+  //   if (password.password != password.confirm_password) {
+  //     throw new UnprocessableEntityException('As senhas não conferem.');
+  //   }
+  //   return await this.changePassword(password);
+  // }
 
   private async hashPassword(password: string, salt: string): Promise<string> {
     return bcrypt.hash(password, salt);
@@ -177,11 +149,4 @@ export class UsersService {
 //       reject(error);
 //     }
 //   });
-// }
-
-// async changePassword(password: changePasswordDto): Promise<UserEntity> {
-//   if (password.password != password.confirm_password) {
-//     throw new UnprocessableEntityException('As senhas não conferem.');
-//   }
-//   return await this.changePassword(password);
 // }

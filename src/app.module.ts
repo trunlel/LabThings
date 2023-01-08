@@ -7,6 +7,7 @@ import { databaseProviders } from './core/database/database.providers';
 import { JwtStrategy } from './core/auth/jwt.strategy';
 import { userProvider } from './users/user.providers';
 import { authController } from './core/auth/controller/auth.controller';
+import { DevicesModule } from './devices/device.module';
 
 @Module({
   imports: [
@@ -17,11 +18,12 @@ import { authController } from './core/auth/controller/auth.controller';
     JwtModule.register({
       secret: 'jb2KURr1O89JjfcvCPIZkh3qQQ',
       signOptions: {
-        expiresIn: 60,
+        expiresIn: 60 * 60 * 60 * 60 * 60,
       },
     }),
 
     UsersModule,
+    DevicesModule,
   ],
   controllers: [authController],
   providers: [...databaseProviders, ...userProvider, AuthService, JwtStrategy],

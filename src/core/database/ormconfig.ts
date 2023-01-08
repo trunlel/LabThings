@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { SeederOptions } from 'typeorm-extension';
-import DeviceSeeder from './seeds/device.seed';
-import { Device } from './seeds/device';
+import DeviceSeeder from '../../devices/seeds/device.seed';
+import { DeviceEntity } from '../../devices/entities/device.entity';
+import { UserEntity } from '../../users/entities/user.entity';
+import { AddressEntity } from '../../users/entities/address.entity';
+import { UserDeviceEntity } from '../../devices/entities/user-device.entity';
 require('dotenv-flow').config();
 
 const options: DataSourceOptions & SeederOptions = {
@@ -12,11 +15,7 @@ const options: DataSourceOptions & SeederOptions = {
   username: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
-  entities: [
-    __dirname + '/../../**/**/*.entity{.ts,.js}', // As entidades serão buscadas em todas as pastas e precisa existir .entity no nome do arquivo.
-    'dist/**/**/*.entity.js',
-    Device,
-  ],
+  entities: [DeviceEntity, UserEntity, AddressEntity, UserDeviceEntity],
   migrations: [
     __dirname + '../migrations/*{.ts,.js}',
     __dirname + './migrations/*{.ts,.js}',
