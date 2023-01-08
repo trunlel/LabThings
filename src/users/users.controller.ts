@@ -5,17 +5,13 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   HttpException,
   HttpStatus,
-  ValidationPipe,
+  Request,
 } from '@nestjs/common';
 import { UsersService } from './service/users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
-import { AddressDTO } from './dto/address-user.dto';
-import { AuthService } from 'src/core/auth/auth.service';
-import { authDto } from './dto/login-user.dto';
 import { changePasswordDto } from './dto/update-user.dto';
 import { linkDeviceDto } from './dto/link-device.dto';
 import { Device } from 'src/core/database/seeds/device';
@@ -37,8 +33,9 @@ export class UsersController {
       throw new HttpException({ reason: err?.detail }, HttpStatus.BAD_REQUEST);
     }
   }
+
   @Get('devices')
-  async findAllDevices(@Headers('authorization') authToken): Promise<Device[]> {
+  async findAllDevices(): Promise<Device[]> {
     try {
       return await this.usersService.findAllDevices();
     } catch (err) {
@@ -46,7 +43,7 @@ export class UsersController {
     }
   }
 
-  @Post('device:id')
+  @Post('device/:id')
   async creat(@Param('id') id: number, @Body() body: linkDeviceDto) {
     return await this.usersService.linkDevice(id, body);
   }

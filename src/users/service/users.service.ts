@@ -1,12 +1,14 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UserEntity } from '../entities/user.entity';
+import { LinkedEntity } from '../entities/link-device.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { AddressEntity } from '../entities/address.entity';
 import { changePasswordDto } from '../dto/update-user.dto';
 import { linkDeviceDto } from '../dto/link-device.dto';
 import { Device } from 'src/core/database/seeds/device';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
@@ -17,6 +19,10 @@ export class UsersService {
     private addressRepository: Repository<AddressEntity>,
     @Inject('DEVICE_REPOSITORY')
     private deviceRepository: Repository<Device>,
+    @Inject('LINKED_REPOSITORY')
+    private linkedRepository: Repository<LinkedEntity>,
+
+    private jwtService: JwtService,
   ) {}
 
   createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
@@ -64,13 +70,21 @@ export class UsersService {
     return;
   }
 
-  async linkDevice(id: number, body: linkDeviceDto) {
-    const device = await this.deviceRepository.findOne({
-      where: {
-        id: id,
-      },
+  async linkDevice(id: number, body: linkDeviceDto): Promise<any> {
+    return new Promise(async (resolve) => {
+      let userDevice = this.linkedRepository.create();
+      userDevice = { ...body, ...userDevice };
+      console.log(userDevice);
+      const device: Device = await this.deviceRepository.findOne({
+        where: { id: id },
+        relations: {
+          id: true,
+        },
+      });
+
+      this.linkedRepository.save(device);
+      resolve(userDevice);
     });
-    return device;
   }
 
   async findAllDevices(): Promise<Device[]> {
