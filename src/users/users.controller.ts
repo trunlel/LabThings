@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
   HttpException,
   HttpStatus,
   ValidationPipe,
@@ -17,27 +18,34 @@ import { AddressDTO } from './dto/address-user.dto';
 import { AuthService } from 'src/core/auth/auth.service';
 import { authDto } from './dto/login-user.dto';
 import { changePasswordDto } from './dto/update-user.dto';
+import { request } from 'http';
+import { UseGuards } from '@nestjs/common/decorators';
+import { JwtAuthGuard } from 'src/core/auth/jwt-auth.guard';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  async create(@Body() createdUser: CreateUserDto) {
+  async createUser(@Body() createdUser: CreateUserDto) {
     return await this.usersService.createUser(createdUser);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
-  async findAll(): Promise<UserEntity[]> {
+  async findUser(@Request() request): Promise<UserEntity> {
     try {
-      return await this.usersService.findAll();
+      return await this.usersService.findUser(request.user);
     } catch (err) {
       throw new HttpException({ reason: err?.detail }, HttpStatus.BAD_REQUEST);
     }
   }
 
   @Patch(':id')
-  async update(@Param('id') id: number, @Body() body: changePasswordDto) {
+  async updatePassword(
+    @Param('id') id: number,
+    @Body() body: changePasswordDto,
+  ) {
     console.log(id);
     return await this.usersService.changePassword(id, body);
   }

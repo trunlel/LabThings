@@ -17,7 +17,7 @@ export class DevicesService {
     private userDeviceRepository: Repository<UserDeviceEntity>,
   ) {}
 
-  linkeDeviceInUser(
+  linkDeviceInUser(
     userPayload: JwtPayloadUser,
     description: any,
     followingId: number,
@@ -49,7 +49,9 @@ export class DevicesService {
     });
   }
 
-  async findAll(userPayload: JwtPayloadUser): Promise<UserDeviceEntity[]> {
+  async findAllDevices(
+    userPayload: JwtPayloadUser,
+  ): Promise<UserDeviceEntity[]> {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await this.userDeviceRepository.find({

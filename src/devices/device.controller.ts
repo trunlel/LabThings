@@ -19,15 +19,15 @@ export class DevicesController {
 
   @UseGuards(JwtAuthGuard)
   @Post('/link/:id')
-  async followUser(@Body() body, @Request() request, @Param('id') id: string) {
-    return await this.DevicesService.linkeDeviceInUser(request.user, body, +id);
+  async linkDevice(@Body() body, @Request() request, @Param('id') id: string) {
+    return await this.DevicesService.linkDeviceInUser(request.user, body, +id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async findAll(@Request() request): Promise<UserDeviceEntity[]> {
+  async findUserDevices(@Request() request): Promise<UserDeviceEntity[]> {
     try {
-      return await this.DevicesService.findAll(request.user);
+      return await this.DevicesService.findAllDevices(request.user);
     } catch (err) {
       throw new HttpException({ reason: err?.detail }, HttpStatus.BAD_REQUEST);
     }

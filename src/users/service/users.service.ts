@@ -9,6 +9,7 @@ import { authDto } from '../dto/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { changePasswordDto } from '../dto/update-user.dto';
 import { UnprocessableEntityException } from '@nestjs/common/exceptions';
+import { JwtPayloadUser } from 'src/utils/jwt-payload-user';
 
 @Injectable()
 export class UsersService {
@@ -19,7 +20,7 @@ export class UsersService {
     private addressRepository: Repository<AddressEntity>,
   ) {}
 
-  createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
+  async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
     return new Promise(async (resolve, reject) => {
       try {
         const { password } = createUserDto;
@@ -36,10 +37,13 @@ export class UsersService {
     });
   }
 
-  async findAll(): Promise<UserEntity[]> {
+  async findUser(userPayload: JwtPayloadUser): Promise<UserEntity> {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await this.userRepository.find({
+        const res = await this.userRepository.findOne({
+          where: {
+            userId: userPayload.id,
+          },
           relations: {
             address: true,
           },
