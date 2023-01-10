@@ -71,6 +71,19 @@ export class DevicesService {
     });
   }
 
+  async findOneDevice(deviceId: number): Promise<DeviceEntity> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await this.deviceRepository.findOne({
+          where: { id: deviceId },
+        });
+        resolve(res);
+      } catch (error) {
+        reject({ detail: error.detail, code: error.ccode });
+      }
+    });
+  }
+
   private async hashPassword(password: string, salt: string): Promise<string> {
     return bcrypt.hash(password, salt);
   }

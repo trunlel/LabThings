@@ -41,12 +41,14 @@ export class UsersController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async updatePassword(
     @Param('id') id: number,
+    @Request() request,
     @Body() body: changePasswordDto,
   ) {
     console.log(id);
-    return await this.usersService.changePassword(id, body);
+    return await this.usersService.changePassword(id, request.user, body);
   }
 }

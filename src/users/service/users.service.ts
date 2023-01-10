@@ -55,10 +55,14 @@ export class UsersService {
     });
   }
 
-  async changePassword(id: number, body: changePasswordDto) {
+  async changePassword(
+    id: number,
+    userPayload: JwtPayloadUser,
+    body: changePasswordDto,
+  ) {
     const user = await this.userRepository.findOne({
       where: {
-        userId: id,
+        userId: userPayload.id,
       },
     });
     user.password = await this.hashPassword(body.password, user.salt);

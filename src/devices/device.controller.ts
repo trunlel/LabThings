@@ -12,6 +12,7 @@ import { DevicesService } from './services/devices.service';
 import { JwtAuthGuard } from 'src/core/auth/jwt-auth.guard';
 import { UserDeviceEntity } from './entities/user-device.entity';
 import { HttpException } from '@nestjs/common/exceptions';
+import { DeviceEntity } from './entities/device.entity';
 
 @Controller('devices')
 export class DevicesController {
@@ -28,6 +29,15 @@ export class DevicesController {
   async findUserDevices(@Request() request): Promise<UserDeviceEntity[]> {
     try {
       return await this.DevicesService.findAllDevices(request.user);
+    } catch (err) {
+      throw new HttpException({ reason: err?.detail }, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Get(':id')
+  async findDevice(@Param('id') id: number): Promise<DeviceEntity> {
+    try {
+      return await this.DevicesService.findOneDevice(id);
     } catch (err) {
       throw new HttpException({ reason: err?.detail }, HttpStatus.BAD_REQUEST);
     }
