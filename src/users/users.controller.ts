@@ -4,21 +4,14 @@ import {
   Post,
   Body,
   Patch,
-  Param,
-  Delete,
   Request,
   HttpException,
   HttpStatus,
-  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './service/users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
-import { AddressDTO } from './dto/address-user.dto';
-import { AuthService } from 'src/core/auth/auth.service';
-import { authDto } from './dto/login-user.dto';
 import { changePasswordDto } from './dto/update-user.dto';
-import { request } from 'http';
 import { UseGuards } from '@nestjs/common/decorators';
 import { JwtAuthGuard } from 'src/core/auth/jwt-auth.guard';
 

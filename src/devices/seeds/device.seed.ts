@@ -13,7 +13,7 @@ export default class DeviceSeeder implements Seeder {
         name: 'Lâmpada LED',
         type: 'Energia',
         madeBy: 'Intelbras',
-        active: true,
+        active: false,
         info: '10 wats',
         photoUrl:
           'https://intelbras.vteximg.com.br/arquivos/ids/160115-1000-1000/ews_407_front_cor.jpg?v=637564221001370000',
@@ -24,7 +24,7 @@ export default class DeviceSeeder implements Seeder {
         name: 'Câmera de vídeo iM4 C',
         type: 'Segurança eletrônica',
         madeBy: 'Intelbras',
-        active: true,
+        active: false,
         info: 'Detecta Movimento',
         photoUrl:
           'https://intelbras.vteximg.com.br/arquivos/ids/163947-800-800/IM4-1---Frontal.png?v=637813074366430000',
@@ -35,7 +35,7 @@ export default class DeviceSeeder implements Seeder {
         name: 'Smart controle universal infravermelho',
         type: 'Comunicação',
         madeBy: 'Intelbras',
-        active: true,
+        active: false,
         info: '100 metros',
         photoUrl:
           'https://intelbras.vteximg.com.br/arquivos/ids/158406-800-800/persp-esquerda.jpg?v=637309549919770000',

@@ -5,6 +5,7 @@ import { UserEntity } from 'src/users/entities/user.entity';
 import { DeviceEntity } from '../entities/device.entity';
 import { UserDeviceEntity } from '../entities/user-device.entity';
 import { JwtPayloadUser } from 'src/utils/jwt-payload-user';
+import { localDeviceDto } from '../dto/link-device.dto';
 
 @Injectable()
 export class DevicesService {
@@ -19,7 +20,7 @@ export class DevicesService {
 
   linkDeviceInUser(
     userPayload: JwtPayloadUser,
-    description: any,
+    description: localDeviceDto,
     followingId: number,
   ) {
     return new Promise<void>(async (resolve) => {
