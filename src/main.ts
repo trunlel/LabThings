@@ -5,7 +5,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: ['error', 'warn']
+    logger: ['error', 'warn'],
   });
   app.useGlobalPipes(new ValidationPipe());
 
@@ -17,7 +17,7 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, document);
-  
+
   await app.listen(3000);
 }
 bootstrap();

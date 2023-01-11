@@ -8,8 +8,15 @@ import { AddressEntity } from '../entities/address.entity';
 import { authDto } from '../dto/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { changePasswordDto } from '../dto/update-user.dto';
-import { UnprocessableEntityException } from '@nestjs/common/exceptions';
+import {
+  BadRequestException,
+  ConflictException,
+  HttpException,
+  UnprocessableEntityException,
+} from '@nestjs/common/exceptions';
 import { JwtPayloadUser } from 'src/utils/jwt-payload-user';
+import { HttpStatus } from '@nestjs/common/enums';
+import { error } from 'console';
 
 @Injectable()
 export class UsersService {
@@ -22,6 +29,12 @@ export class UsersService {
 
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
     return new Promise(async (resolve, reject) => {
+      const existe = this.userRepository.findOne({
+        where: {
+          email: createUserDto.email,
+        },
+      });
+
       try {
         const { password } = createUserDto;
         const newUser = this.userRepository.create(createUserDto);
@@ -55,28 +68,27 @@ export class UsersService {
     });
   }
 
-  async changePassword(
-    id: number,
-    userPayload: JwtPayloadUser,
-    body: changePasswordDto,
-  ) {
+  async changePassword(userPayload: JwtPayloadUser, body: changePasswordDto) {
     const user = await this.userRepository.findOne({
       where: {
+        email: body.email,
         userId: userPayload.id,
       },
     });
+    const isValidPassword = await bcrypt.compare(
+      body.old_password,
+      user.password,
+    );
+    if (!isValidPassword) {
+      throw new error();
+    }
+
     user.password = await this.hashPassword(body.password, user.salt);
 
     await this.userRepository.save(user);
     console.log(body);
     return;
   }
-  // async changePassword(password: changePasswordDto): Promise<UserEntity> {
-  //   if (password.password != password.confirm_password) {
-  //     throw new UnprocessableEntityException('As senhas não conferem.');
-  //   }
-  //   return await this.changePassword(password);
-  // }
 
   private async hashPassword(password: string, salt: string): Promise<string> {
     return bcrypt.hash(password, salt);

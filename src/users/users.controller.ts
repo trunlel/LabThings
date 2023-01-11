@@ -28,7 +28,11 @@ export class UsersController {
 
   @Post()
   async createUser(@Body() createdUser: CreateUserDto) {
-    return await this.usersService.createUser(createdUser);
+    try {
+      return await this.usersService.createUser(createdUser);
+    } catch (err) {
+      throw new HttpException({ reason: err?.detail }, HttpStatus.CONFLICT);
+    }
   }
 
   @UseGuards(JwtAuthGuard)
@@ -42,13 +46,15 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch(':id')
-  async updatePassword(
-    @Param('id') id: number,
-    @Request() request,
-    @Body() body: changePasswordDto,
-  ) {
-    console.log(id);
-    return await this.usersService.changePassword(id, request.user, body);
+  @Patch('update')
+  async updatePassword(@Request() request, @Body() body: changePasswordDto) {
+    try {
+      return await this.usersService.changePassword(request.user, body);
+    } catch (err) {
+      throw new HttpException(
+        'Verifique seu email e senha!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }
