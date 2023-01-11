@@ -24,7 +24,7 @@ export class UserDeviceEntity {
   @ManyToOne(() => UserEntity, (user) => user.devicesCreated, {
     onDelete: 'SET NULL',
   })
-  @JoinColumn({ name: 'user_id' }) // opcional para OneToMany
+  @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
   @ManyToOne(() => DeviceEntity, (device) => device.userCreated, {

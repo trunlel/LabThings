@@ -21,7 +21,7 @@ const options: DataSourceOptions & SeederOptions = {
     __dirname + './migrations/*{.ts,.js}',
     'dist/core/database/migrations/*{.ts,.js}',
   ],
-  synchronize: true, //Essa propriedade não deve ser utilizada em produção! Caso contrário os dados poderão ser perdidos.
+  synchronize: true,
   migrationsRun: false,
   migrationsTableName: 'history',
   seeds: [DeviceSeeder],

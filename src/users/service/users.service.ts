@@ -3,19 +3,9 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { UserEntity } from '../entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { AddressDTO } from '../dto/address-user.dto';
 import { AddressEntity } from '../entities/address.entity';
-import { authDto } from '../dto/login-user.dto';
-import { JwtService } from '@nestjs/jwt';
 import { changePasswordDto } from '../dto/update-user.dto';
-import {
-  BadRequestException,
-  ConflictException,
-  HttpException,
-  UnprocessableEntityException,
-} from '@nestjs/common/exceptions';
 import { JwtPayloadUser } from 'src/utils/jwt-payload-user';
-import { HttpStatus } from '@nestjs/common/enums';
 import { error } from 'console';
 
 @Injectable()
@@ -29,12 +19,6 @@ export class UsersService {
 
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
     return new Promise(async (resolve, reject) => {
-      const existe = this.userRepository.findOne({
-        where: {
-          email: createUserDto.email,
-        },
-      });
-
       try {
         const { password } = createUserDto;
         const newUser = this.userRepository.create(createUserDto);
@@ -94,79 +78,3 @@ export class UsersService {
     return bcrypt.hash(password, salt);
   }
 }
-
-// create(createUserDto: CreateUserDto) {
-//   console.log(createUserDto);
-//   return 'This action adds a new user';
-// }
-
-// Borala(createdUser: CreateUserDto): Promise<UserEntity> {
-//   return new Promise(async (resolve, reject) => {
-//     try {
-//       const userToBeSaved = await this.userRepository.create(createdUser);
-//       const user: UserEntity = await this.userRepository.save(userToBeSaved);
-//       resolve(user);
-//     } catch (error) {
-//       reject({ code: error.code, detail: error.detail });
-//     }
-//   });
-// }
-
-// findAll(id: number): Promise<UserEntity> {
-//   return new Promise(async (resolve) => {
-//     const res = await this.userRepository.findOne({
-//       where: {
-//         userId: id,
-//       },
-//       relations: {
-//         name: true,
-//         email: true,
-//       },
-//     });
-//     resolve(res);
-//   });
-// }
-
-// createUser(createdUser: CreateUserDto): Promise<UserEntity> {
-//   return new Promise(async (resolve, reject) => {
-//     try {
-//       const { email, name, password, phone, photoUrl, address } = createdUser;
-//       const user = this.userRepository.create();
-//       user.email = email;
-//       user.name = name;
-//       user.phone = phone;
-//       user.photoUrl = photoUrl;
-//       user.salt = await bcrypt.genSalt(12);
-//       user.password = await this.hashPassword(password, user.salt);
-//       const userToBeSaved = await this.userRepository.create(user);
-//       const userCreated = await this.userRepository.save(userToBeSaved);
-//       delete userCreated.password;
-//       delete user.salt;
-//       resolve(userCreated);
-//     } catch (error) {
-//       reject({ code: error.code, detail: error.detail });
-//     }
-//   });
-// }
-
-//  async findAll(): Promise<UserEntity[]> {
-//     return new Promise(async (resolve, reject) => {
-//       try {
-//         resolve(await this.userRepository.find());
-//         resolve(null);
-//       } catch (error) {
-//         reject(error);
-//       }
-//     });
-//   }
-
-// async findAll(): Promise<UserEntity[]> {
-//   return new Promise(async (resolve, reject) => {
-//     try {
-//       resolve(await this.userRepository.find());
-//       resolve(null);
-//     } catch (error) {
-//       reject(error);
-//     }
-//   });
-// }

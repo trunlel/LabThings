@@ -41,8 +41,4 @@ export class DeviceEntity {
     cascade: true,
   })
   userCreated: UserEntity[];
-
-  // @ManyToOne(() => UserEntity, (user) => user.devices, {
-  //   onDelete: 'SET NULL',
-  // })
 }

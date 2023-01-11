@@ -17,7 +17,6 @@ export class AuthService {
     if (user === null) {
       throw new UnauthorizedException('Credenciais inválidas');
     }
-    // Informo o que vai conter no token quando decodificado.
     const jwtPayload = {
       id: user.userId,
       name: user.name,
@@ -60,46 +59,3 @@ export class AuthService {
     });
   }
 }
-
-//  signIn(credentials: authDto): Promise<string> {
-//     return new Promise(async (resolve, reject) => {
-//       try {
-//         const { email, password } = credentials;
-//         const user = await this.userRepository.findOne({
-//           where: { email: email },
-//         });
-
-//         if (!user?.salt) {
-//           console.log('não tem usuario');
-//           reject('não tem usuario');
-//         }
-
-//         if (await user.checkPassword(password)) {
-//           const jwtPayload = {
-//             id: user.userId,
-//             name: user.name,
-//             email: user.email,
-//             photo: user.photoUrl,
-//           };
-//           console.log(jwtPayload);
-//           resolve(this.jwtService.sign(jwtPayload));
-//         }
-//       } catch (error) {
-//         reject(error);
-//       }
-//     });
-//   }
-
-//   async checkCredentials(credentials: authDto) {
-//     const { email, password } = credentials;
-//     const user = await this.userRepository.findOne({
-//       where: {
-//         email: email,
-//       },
-//     });
-
-//     if (user && (await user.checkPassword(password))) {
-//       return user;
-//     }
-//     return null;
-//   }

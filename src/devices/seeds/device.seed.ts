@@ -1,12 +1,9 @@
-import { Seeder, SeederFactoryManager } from 'typeorm-extension';
+import { Seeder } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 import { DeviceEntity } from '../../devices/entities/device.entity';
 
 export default class DeviceSeeder implements Seeder {
-  public async run(
-    dataSource: DataSource,
-    factoryManager: SeederFactoryManager,
-  ): Promise<any> {
+  public async run(dataSource: DataSource): Promise<any> {
     const repository = dataSource.getRepository(DeviceEntity);
     await repository.insert([
       {
