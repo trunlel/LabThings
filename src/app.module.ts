@@ -18,7 +18,7 @@ import { DevicesModule } from './devices/device.module';
     JwtModule.register({
       secret: 'jb2KURr1O89JjfcvCPIZkh3qQQ',
       signOptions: {
-        expiresIn: 60 * 60 * 60 * 60 * 60,
+        expiresIn: 60 * 2,
       },
     }),
 

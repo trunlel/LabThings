@@ -21,7 +21,15 @@ export class DevicesController {
   @UseGuards(JwtAuthGuard)
   @Post('/link/:id')
   async linkDevice(@Body() body, @Request() request, @Param('id') id: string) {
-    return await this.DevicesService.linkDeviceInUser(request.user, body, +id);
+    try {
+      return await this.DevicesService.linkDeviceInUser(
+        request.user,
+        body,
+        +id,
+      );
+    } catch (err) {
+      throw new HttpException({ reason: err?.detail }, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @UseGuards(JwtAuthGuard)
@@ -30,7 +38,7 @@ export class DevicesController {
     try {
       return await this.DevicesService.findAllDevices(request.user);
     } catch (err) {
-      throw new HttpException({ reason: err?.detail }, HttpStatus.BAD_REQUEST);
+      throw new HttpException({ reason: err?.detail }, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -39,7 +47,7 @@ export class DevicesController {
     try {
       return await this.DevicesService.findOneDevice(id);
     } catch (err) {
-      throw new HttpException({ reason: err?.detail }, HttpStatus.BAD_REQUEST);
+      throw new HttpException({ reason: err?.detail }, HttpStatus.NOT_FOUND);
     }
   }
 }

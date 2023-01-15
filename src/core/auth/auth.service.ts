@@ -41,21 +41,4 @@ export class AuthService {
     }
     return null;
   }
-
-  validateToken(jwtToken: string) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        resolve(
-          await this.jwtService.verifyAsync(jwtToken, {
-            ignoreExpiration: true,
-          }),
-        );
-      } catch (error) {
-        reject({
-          code: 401,
-          detail: 'JWT expired.',
-        });
-      }
-    });
-  }
 }

@@ -10,7 +10,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
-    .setTitle('DevIn[Intelbras]')
+    .setTitle('LabThings')
     .setDescription('Módulo 2 - NestJS')
     .setVersion('1.0')
     .build();

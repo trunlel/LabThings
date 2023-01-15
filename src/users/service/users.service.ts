@@ -70,7 +70,6 @@ export class UsersService {
     user.password = await this.hashPassword(body.password, user.salt);
 
     await this.userRepository.save(user);
-    console.log(body);
     return;
   }
 

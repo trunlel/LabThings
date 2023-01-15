@@ -5,8 +5,6 @@ import {
   Column,
   JoinColumn,
 } from 'typeorm';
-import { LocalEnum } from '../enum/local-device.enum';
-import { RoomEnum } from '../enum/room-device.enum';
 import { UserEntity } from '../../users/entities/user.entity';
 import { DeviceEntity } from './device.entity';
 
