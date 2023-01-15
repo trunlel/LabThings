@@ -17,7 +17,7 @@ export class UsersService {
     private addressRepository: Repository<AddressEntity>,
   ) {}
 
-  async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
+  async createUser(createUserDto: CreateUserDto): Promise<string> {
     return new Promise(async (resolve, reject) => {
       try {
         const { password } = createUserDto;
@@ -27,7 +27,7 @@ export class UsersService {
         const user: UserEntity = await this.userRepository.save(newUser);
         delete user.password;
         delete user.salt;
-        resolve(user);
+        resolve('Usuário cadastrado com sucesso!');
       } catch (error) {
         reject({ detail: error.detail, code: error.ccode });
       }
@@ -45,6 +45,9 @@ export class UsersService {
             address: true,
           },
         });
+        if (!res.phone) {
+          res.phone = null;
+        }
         resolve(res);
       } catch (error) {
         reject({ detail: error.detail, code: error.ccode });
