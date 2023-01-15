@@ -38,11 +38,15 @@ $ npm install
 # development
 $ npm run start
 
+# Seed Run
+$ npm run seed
+
 # watch mode
 $ npm run start:dev
 
 # production mode
 $ npm run start:prod
+
 ```
 
 ## Test
@@ -59,6 +63,7 @@ $ npm run test:cov
 ```
 
 ## Migrations
+
 ```bash
 # Cria uma migration (vazia)
 $ npm run migration:create --name=nome_migration
@@ -72,6 +77,7 @@ $ npm run migration:run
 # Reverter a migration
 $ npm run migration:revert
 ```
+
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
