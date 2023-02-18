@@ -13,6 +13,7 @@ async function bootstrap() {
     .setTitle('LabThings')
     .setDescription('Módulo 2 - NestJS')
     .setVersion('1.0')
+    .addTag('cats')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
