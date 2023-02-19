@@ -12,7 +12,7 @@ phases:
   post_build:
     commands:
       - echo Removendo arquivos desnecessários
-      - rm -rf node_modules/
+      # - rm -rf node_modules/
 
 artifacts:
   base_directory: '.'
